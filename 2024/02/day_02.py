@@ -83,7 +83,7 @@ def check_safety_part1():
 
 
 def fill_reports():
-    f = open("input/day_02", "r")
+    f = open("input/day_02.txt", "r")
     for x in f:
         split = x.strip().split(" ")
 
