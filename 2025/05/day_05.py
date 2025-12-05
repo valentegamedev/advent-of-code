@@ -17,6 +17,7 @@ def read_input_data():
         else:
             input_data.append(int(row))
 
+#567
 def do_part_1():
     set_of_fresh_ids = set()
     for range in fresh_range:
@@ -26,10 +27,32 @@ def do_part_1():
 
     return len(set_of_fresh_ids)
 
+#354149806372909
 def do_part_2():
-    pass
+    global fresh_range
+
+    final_fresh_range = []
+    fresh_range = sorted(fresh_range, key=lambda v: v[0])
+    #print(fresh_range)
+
+    current_range = fresh_range[0]
+
+    for range in fresh_range:
+        if range[0] <= current_range[1]:
+            current_range = (current_range[0], max(range[1], current_range[1]))
+        else:
+            final_fresh_range.append(current_range)
+            current_range = range
+
+    final_fresh_range.append(current_range)
+
+    sum_ranges = 0
+    for range in final_fresh_range:
+        sum_ranges += range[1]-range[0]+1
+
+    return sum_ranges
 
 if __name__ == '__main__':
     read_input_data()
-    print(do_part_1())
-    #do_part_2()
+    #print(do_part_1())
+    print(do_part_2())
