@@ -2,7 +2,14 @@ import re
 
 input_data = []
 
-def read_input_data():
+def read_input_data_day_1():
+    f = open("input/data.txt", "r")
+    for i in f:
+        i = re.sub(r'\s+', ' ', i)
+        i = i.strip().replace('\r', '').replace('\n', '')
+        input_data.append(i.split(' '))
+
+def read_input_data_day_2():
     f = open("input/data.txt", "r")
     temp_input_data = []
     for i in f:
@@ -15,6 +22,7 @@ def read_input_data():
 
 #4951502530386
 def do_part_1():
+    read_input_data_day_1()
     columns = len(input_data[0])
     rows = len(input_data)
 
@@ -66,6 +74,7 @@ def get_numbers_from_operation(operation):
 
 #8486156119946
 def do_part_2():
+    read_input_data_day_2()
     operations = get_operations()
 
     total = 0
@@ -81,10 +90,9 @@ def do_part_2():
                 total_operation += number
         total += total_operation
 
-    print(total)
+    return total
 
 
 if __name__ == '__main__':
-    read_input_data()
     #print(do_part_1())
-    do_part_2()
+    print(do_part_2())
