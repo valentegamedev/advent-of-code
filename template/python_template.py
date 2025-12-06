@@ -3,7 +3,7 @@ input_data = []
 def read_input_data():
     f = open("input/data.txt", "r")
     for i in f:
-        input_data.append(i)
+        input_data.append(i.strip().replace('\r', '').replace('\n', ''))
 
 def do_part_1():
     print(input_data)
