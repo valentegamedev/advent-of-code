@@ -33,6 +33,7 @@ def build_graph():
 
     return g
 
+#66912
 def do_part_1():
     g = build_graph()
     g.add_edges(edges[:1000])
@@ -46,6 +47,7 @@ def do_part_1():
     else:
         return sizes[0] * sizes[1] * sizes[2]
 
+#724454082
 def do_part_2():
     g = build_graph()
 
@@ -55,7 +57,7 @@ def do_part_2():
         edge = edges[idx]
         g.add_edges([edge])
 
-        order, layers, parents = g.bfs(
+        order, _, _ = g.bfs(
             vid=edges[0][0],
         )
 
