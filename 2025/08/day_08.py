@@ -17,22 +17,24 @@ def read_input_data():
         junction_box_string = i.strip().replace('\r', '').replace('\n', '').split(',')
         junction_box_string.insert(0, str(idx))
         junction_box = list(map(int, junction_box_string))
-        input_data.append(tuple(junction_box))
+        input_data.append(tuple(junction_box)) #(ID, X, Y, Z)
 
     for i, j in combinations(input_data, 2):
         edges.append((i[0], j[0]))
 
     edges.sort(key=lambda edge: dist(edge[0], edge[1]))
 
-    #print(edges)
-
-def do_part_1():
+def build_graph():
     global edges
     n = len(input_data)
 
     g = ig.Graph(n=n, directed=False)
     g.vs["value"] = input_data
 
+    return g
+
+def do_part_1():
+    g = build_graph()
     g.add_edges(edges[:1000])
 
     subgraphs = g.connected_components()
@@ -45,9 +47,24 @@ def do_part_1():
         return sizes[0] * sizes[1] * sizes[2]
 
 def do_part_2():
-    pass
+    g = build_graph()
+
+    for idx in range(0, len(edges)):
+        if idx >= len(edges):
+            break
+        edge = edges[idx]
+        g.add_edges([edge])
+
+        order, layers, parents = g.bfs(
+            vid=edges[0][0],
+        )
+
+        if len(order) == len(input_data):
+            return input_data[edge[0]][1] * input_data[edge[1]][1]
+
+    return -1
 
 if __name__ == '__main__':
     read_input_data()
-    print(do_part_1())
-    #do_part_2()
+    #print(do_part_1())
+    print(do_part_2())
