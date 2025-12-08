@@ -1,3 +1,5 @@
+from functools import cache
+
 input_data = []
 
 def read_input_data():
@@ -5,12 +7,11 @@ def read_input_data():
     for i in f:
         input_data.append(i.strip().replace('\r', '').replace('\n', ''))
 
-def do_part_1():
+#1573
+def do_part_1(start):
     beams = []
-    start_index = input_data[0].index("S")
-    print(start_index)
 
-    beams.append((1, start_index)) #(row, column)
+    beams.append(start) #(row, column)
 
     splits = 0
     beams_trail = set()
@@ -37,11 +38,28 @@ def do_part_1():
 
     return splits
 
+def in_bounds(pos):
+    return 0 <= pos[0] < len(input_data) and 0 <= pos[1] < len(input_data[0])
 
-def do_part_2():
-    pass
+#15093663987272
+@cache
+def do_part_2(start):
+    row, column = start
+
+    while in_bounds((row, column)) and input_data[row][column] != '^':
+        row += 1
+
+    if not in_bounds((row, column)):
+        return 1
+
+    left = (row, column - 1)
+    right = (row, column + 1)
+    return do_part_2(left) + do_part_2(right)
 
 if __name__ == '__main__':
     read_input_data()
-    print(do_part_1())
-    #do_part_2()
+    start_index = input_data[0].index("S")
+    start = (1, start_index)
+
+    #print(do_part_1(start))
+    print(do_part_2(start))
