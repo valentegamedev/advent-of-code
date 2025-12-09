@@ -2,6 +2,8 @@ from collections import deque
 from itertools import combinations
 import pyrect
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, Polygon
 
 tiles = []
 input_data = []
@@ -89,6 +91,22 @@ def rect_is_allowed(x1, y1, x2, y2):
             if row[x] not in ('#', 'O','.'):
                 return False
     return True
+
+def visualize(input_data, biggest_area):
+    poly_xy = list(input_data)
+    fig, ax = plt.subplots(figsize=(6,6))
+    poly = Polygon(poly_xy, closed=True, fill=True, alpha=0.2, edgecolor='black')
+    ax.add_patch(poly)
+
+    xs, ys = map(list, zip(*input_data))
+    ax.scatter(xs, ys, s=10)
+
+    xmin, ymin, w, h = biggest_area
+    rect_patch = Rectangle((xmin, ymin), w, h, alpha=0.25, edgecolor='red', facecolor='red')
+    ax.add_patch(rect_patch)
+
+    plt.show()
+
 
 #1572047142
 def do_part_2():
