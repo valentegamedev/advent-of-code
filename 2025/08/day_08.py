@@ -1,6 +1,7 @@
 from scipy.spatial import distance
 from itertools import combinations
 import igraph as ig
+import matplotlib.pyplot as plt
 
 input_data = []
 edges = []
@@ -33,6 +34,18 @@ def build_graph():
 
     return g
 
+def plot_igraph_3d(g, layout_3d):
+    xs, ys, zs = map(list, zip(*layout_3d))
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(xs, ys, zs, s=5)
+
+    for e in g.es:
+        s, t = e.tuple
+        ax.plot([xs[s], xs[t]], [ys[s], ys[t]], [zs[s], zs[t]], linewidth=1)
+    plt.show()
+
 #66912
 def do_part_1():
     g = build_graph()
@@ -45,7 +58,11 @@ def do_part_1():
         print("Not enough subgraphs")
         return -1
     else:
+        layout_3d = [(v["value"][1], v["value"][2], v["value"][3]) for v in g.vs]
+        plot_igraph_3d(g, layout_3d)
         return sizes[0] * sizes[1] * sizes[2]
+
+
 
 #724454082
 def do_part_2():
@@ -62,11 +79,13 @@ def do_part_2():
         )
 
         if len(order) == len(input_data):
+            layout_3d = [(v["value"][1], v["value"][2], v["value"][3]) for v in g.vs]
+            plot_igraph_3d(g, layout_3d)
             return input_data[edge[0]][1] * input_data[edge[1]][1]
 
     return -1
 
 if __name__ == '__main__':
     read_input_data()
-    #print(do_part_1())
-    print(do_part_2())
+    print(do_part_1())
+    #print(do_part_2())
