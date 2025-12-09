@@ -22,14 +22,9 @@ def read_input_data():
     for i in range(0, (wall_area.height+wall_area.y)):
         row = ['.'] * (wall_area.width + wall_area.x)
         tiles.append(row)
-    #    print(row)
 
     for tile in input_data:
         tiles[tile[1]][tile[0]] = '#'
-
-    #print(input_data)
-    #for row in tiles:
-    #    print(row)
 
 #4749929916
 def do_part_1():
@@ -69,7 +64,6 @@ def flood_fill_outside_corners():
         return
 
     q = deque()
-    # four corners: (x,y) where x is column, y is row
     corners = [(0, 0), (W-1, 0), (0, H-1), (W-1, H-1)]
     for x, y in corners:
         if 0 <= x < W and 0 <= y < H and tiles[y][x] == '.':
