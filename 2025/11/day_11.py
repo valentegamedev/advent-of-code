@@ -67,8 +67,8 @@ def do_part_2():
     fft_dac_intersection = reachable_from_fft & can_reach_dac
 
     pruned_graph = {
-        fft_idx: fft_dac_intersection,
-        dac_idx: set(g.subcomponent(fft_idx, mode="IN")),
+        fft_idx: set(g.subcomponent(fft_idx, mode="IN")),
+        dac_idx: fft_dac_intersection,
         out_idx: set(g.subcomponent(out_idx, mode="IN"))
     }
 
