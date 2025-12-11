@@ -24,6 +24,7 @@ def read_input_data():
     #print(edges)
     #print(nodes)
 
+#566
 def do_part_1():
     #print(nodes)
     you_idx = nodes.index('you')
@@ -48,7 +49,7 @@ def do_part_1():
 
     return len(paths)
 
-
+#331837854931968
 def do_part_2():
     svr_idx = nodes.index('svr')
     fft_idx = nodes.index('fft')
@@ -101,17 +102,6 @@ def do_part_2():
     dac_out = dfs(dac_idx, out_idx, frozenset({dac_idx})) #5632
     print(dac_out)
     dfs.cache_clear()
-
-    #svr_dac = dfs(svr_idx, dac_idx, frozenset({svr_idx}))
-    #svr_dac = 1
-    #print(svr_dac)
-    #dfs.cache_clear()
-    #dac_fft = dfs(dac_idx, fft_idx, frozenset({dac_idx}))
-    #print(dac_fft)
-    #dfs.cache_clear()
-    #fft_out = dfs(fft_idx, out_idx, frozenset({fft_idx}))
-    #print(fft_out)
-    #dfs.cache_clear()
 
     result = svr_fft * fft_dac * dac_out
 
