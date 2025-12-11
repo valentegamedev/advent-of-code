@@ -1,3 +1,8 @@
+import os, sys
+current_dir = os.path.dirname(os.path.abspath(__file__))
+utils_dir = os.path.abspath(os.path.join(current_dir, "../../template"))
+sys.path.append(utils_dir)
+
 import igraph as ig
 
 input_data = []
