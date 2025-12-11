@@ -1,9 +1,5 @@
-import os, sys
-current_dir = os.path.dirname(os.path.abspath(__file__))
-utils_dir = os.path.abspath(os.path.join(current_dir, "../../template"))
-sys.path.append(utils_dir)
-
 import igraph as ig
+from functools import lru_cache
 
 input_data = []
 nodes = []
@@ -52,10 +48,77 @@ def do_part_1():
 
     return len(paths)
 
+
 def do_part_2():
-    pass
+    svr_idx = nodes.index('svr')
+    fft_idx = nodes.index('fft')
+    dac_idx = nodes.index('dac')
+    out_idx = nodes.index('out')
+
+    n = len(nodes)
+    node_to_idx = {name: i for i, name in enumerate(nodes)}
+
+    g = ig.Graph(n=n, directed=True)
+    g.add_edges([(node_to_idx[a], node_to_idx[b]) for a, b in edges])
+
+    reachable_from_fft = set(g.subcomponent(fft_idx, mode='OUT'))
+    can_reach_dac = set(g.subcomponent(dac_idx, mode='IN'))
+    fft_dac_intersection = reachable_from_fft & can_reach_dac
+
+    pruned_graph = {
+        fft_idx: set(g.subcomponent(fft_idx, mode="IN")),
+        dac_idx: fft_dac_intersection,
+        out_idx: set(g.subcomponent(out_idx, mode="IN"))
+    }
+
+    @lru_cache(maxsize=None)
+    def dfs(u, t, visited_frozenset):
+
+        # base case
+        if u == t:
+            return 1
+
+        visited = set(visited_frozenset)
+        total = 0
+
+        for v in g.neighbors(u, mode='OUT'):
+            if v in visited:
+                continue
+
+            if v not in pruned_graph[t]:
+                continue
+
+            total += dfs(v, t, frozenset(visited | {v}))
+
+        return total
+
+    svr_fft = dfs(svr_idx, fft_idx, frozenset({svr_idx})) #7329
+    print(svr_fft)
+    dfs.cache_clear()
+    fft_dac = dfs(fft_idx, dac_idx, frozenset({fft_idx})) #8039306
+    print(fft_dac)
+    dfs.cache_clear()
+    dac_out = dfs(dac_idx, out_idx, frozenset({dac_idx})) #5632
+    print(dac_out)
+    dfs.cache_clear()
+
+    #svr_dac = dfs(svr_idx, dac_idx, frozenset({svr_idx}))
+    #svr_dac = 1
+    #print(svr_dac)
+    #dfs.cache_clear()
+    #dac_fft = dfs(dac_idx, fft_idx, frozenset({dac_idx}))
+    #print(dac_fft)
+    #dfs.cache_clear()
+    #fft_out = dfs(fft_idx, out_idx, frozenset({fft_idx}))
+    #print(fft_out)
+    #dfs.cache_clear()
+
+    result = svr_fft * fft_dac * dac_out
+
+    return result
+
 
 if __name__ == '__main__':
     read_input_data()
-    print(do_part_1())
-    #do_part_2()
+    #print(do_part_1())
+    print(do_part_2())
