@@ -1,12 +1,30 @@
-input_data = []
+pieces = []
+containers = []
 
 def read_input_data():
     f = open("input/data.txt", "r")
+    piece = []
     for i in f:
-        input_data.append(i.strip().replace('\r', '').replace('\n', ''))
+        row = i.strip().replace('\r', '').replace('\n', '')
+        if ':' in row and 'x' not in row:
+            pass
+        elif ':' in row and 'x' in row:
+            row_split = row.split(':')
+            multipliers = list(map(int,row_split[1][1:].split(' ')))
+            size_split = row_split[0].split('x')
+            size = (int(size_split[0]), int(size_split[1]))
+            containers.append((size, multipliers))
+        elif len(row) == 0:
+            pieces.append(piece)
+            piece = []
+        else:
+            piece.append(row)
 
 def do_part_1():
-    print(input_data)
+    pruned_containers = []
+    
+    print(pieces)
+    print(containers)
 
 def do_part_2():
     pass
