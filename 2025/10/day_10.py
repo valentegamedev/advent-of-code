@@ -1,7 +1,6 @@
 import igraph as ig
-import re
-import sys
 from itertools import product
+import z3
 
 machines = []
 
@@ -10,7 +9,7 @@ def read_input_data():
     for i in f:
         line_split = i.strip().replace('\r', '').replace('\n', '').split(' ')
         lights = line_split[0][1:-1]
-        joltage = line_split[-1][1:-1].split(',')
+        joltage = list(map(int, line_split[-1][1:-1].split(',')))
 
         buttons = []
         buttons_list = line_split[1:-1]
@@ -66,7 +65,7 @@ def get_button_presses(machine):
 
     return presses
 
-
+#428
 def do_part_1():
     sum = 0
 
@@ -75,10 +74,28 @@ def do_part_1():
 
     return sum
 
+#based on https://www.youtube.com/watch?v=OJ4dxrIfDfs
+#16613
 def do_part_2():
-    pass
+    sum_all = 0
+    for machine in machines:
+        _, buttons, joltages = machine
+        o = z3.Optimize()
+        vars = z3.Ints(f"n{i}" for i in range(len(buttons)))
+        for var in vars: o.add(var >= 0)
+        for i, joltage in enumerate(joltages):
+            equation = 0
+            for b, button in enumerate(buttons):
+                if i in button:
+                    equation += vars[b]
+            o.add(equation == joltage)
+        o.minimize(sum(vars))
+        o.check()
+        sum_all+= o.model().eval(sum(vars)).as_long()
+
+    return sum_all
 
 if __name__ == '__main__':
     read_input_data()
     print(do_part_1())
-    #do_part_2()
+    #print(do_part_2())
