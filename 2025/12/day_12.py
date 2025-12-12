@@ -23,12 +23,22 @@ def read_input_data():
 def get_piece_area(piece):
     return len(piece) * len(piece[0])
 
+def get_piece_pieces(piece):
+    total = 0
+    for row in piece:
+        for col in row:
+            if col == '#':
+                total += 1
+    return total
+
+#1000 460
 def do_part_1():
     pruned_containers = []
+
     for size, multipliers in containers:
         needed_size = 0
         for idx, multiplier in enumerate(multipliers):
-            needed_size += multiplier * get_piece_area(pieces[idx])
+            needed_size += multiplier * get_piece_pieces(pieces[idx])
         container_size = size[0] * size[1]
         if container_size >= needed_size:
             pruned_containers.append((size, multipliers))
